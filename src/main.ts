@@ -1,0 +1,13 @@
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { getAppPort } from "./config";
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  const port = getAppPort(5009); // 如果未设置端口，默认使用5009端口
+  await app.listen(port);
+}
+
+bootstrap().then((r) => {
+  console.log("application start!");
+});
