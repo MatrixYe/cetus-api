@@ -1,6 +1,16 @@
+// noinspection GrazieInspection
+
 import { Injectable } from "@nestjs/common";
 import { selectSDK } from "../common/sdk";
-import { adjustForSlippage, CetusClmmSDK, Percentage } from "@cetusprotocol/cetus-sui-clmm-sdk";
+import {
+  adjustForSlippage,
+  AggregatorResult,
+  CetusClmmSDK,
+  CoinProvider,
+  PathProvider,
+  Percentage,
+  TransactionUtil
+} from "@cetusprotocol/cetus-sui-clmm-sdk";
 import { ConfigService } from "@nestjs/config";
 import { getKeySecret, getNetWork, getSenderAddress } from "../common/conf";
 import { genKeypair } from "../common/utils";
@@ -77,9 +87,91 @@ export class SwapService {
       coinTypeB: pool.coinTypeB,
       pool_id: pool.poolAddress
     });
+    swapPayload.setGasBudget(1000000);
     // console.log(`swapPayload:${swapPayload}`);
     const ks = getKeySecret(this.config);
     const keypair = genKeypair(ks);
     return await this.SDK.fullClient.sendTransaction(keypair, swapPayload);
+  }
+
+  async toSwapV2(from: string, to: string, amount: number, byAmountIn: boolean, slippage: number, orderSplit: boolean, externalRouter: boolean) {
+    console.log(` from:${from}`);
+    console.log(` to:${to}`);
+    console.log(` amount:${amount}`);
+    console.log(` byAmountIn:${byAmountIn}`);
+    console.log(` slippage:${slippage}`);
+    console.log(` orderSplit:${orderSplit}`);
+    console.log(` externalRouter:${externalRouter}`);
+    const coinMap = new Map();
+    const poolMap = new Map();
+    const resp: any = await fetch("https://api-sui.cetus.zone/v2/sui/pools_info", { method: "GET" });
+    const poolsInfo = await resp.json();
+    if (poolsInfo.code === 200) {
+      for (const pool of poolsInfo.data.lp_list) {
+        if (pool.is_closed) {
+          continue;
+        }
+
+        let coin_a = pool.coin_a.address;
+        let coin_b = pool.coin_b.address;
+
+        coinMap.set(coin_a, {
+          address: pool.coin_a.address,
+          decimals: pool.coin_a.decimals
+        });
+        coinMap.set(coin_b, {
+          address: pool.coin_b.address,
+          decimals: pool.coin_b.decimals
+        });
+
+        const pair = `${coin_a}-${coin_b}`;
+        const pathProvider = poolMap.get(pair);
+        if (pathProvider) {
+          pathProvider.addressMap.set(Number(pool.fee) * 100, pool.address);
+        } else {
+          poolMap.set(pair, {
+            base: coin_a,
+            quote: coin_b,
+            addressMap: new Map([[Number(pool.fee) * 100, pool.address]])
+          });
+        }
+      }
+    } else {
+      return null;
+    }
+    const coins: CoinProvider = {
+      coins: Array.from(coinMap.values())
+    };
+    const paths: PathProvider = {
+      paths: Array.from(poolMap.values())
+    };
+    this.SDK.Router.loadGraph(coins, paths);
+    const senderAddress = getSenderAddress(this.config);
+    const res = (await this.SDK.RouterV2.getBestRouter(
+      from,
+      to,
+      amount,
+      byAmountIn,
+      slippage,
+      "",
+      senderAddress,
+      undefined,
+      orderSplit,
+      externalRouter,
+      undefined
+    )).result as AggregatorResult;
+
+
+    // if find the best swap router, then send transaction.
+    if (!res?.isExceed) {
+      const allCoinAsset = await this.SDK.getOwnerCoinAssets(senderAddress);
+      // If recipient not set, transfer objects move call will use ctx sender.
+      const payload = await TransactionUtil.buildAggregatorSwapTransaction(this.SDK, res, allCoinAsset, "", 0.5);
+      const keypair = genKeypair(getKeySecret(this.config));
+      return await this.SDK.fullClient.sendTransaction(keypair, payload);
+    } else {
+      console.log(`res?.isExceed: ${res?.isExceed}`);
+      return null;
+    }
   }
 }
