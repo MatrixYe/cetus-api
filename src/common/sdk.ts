@@ -148,6 +148,7 @@ export function selectSDK(network: string, senderAddress: string) {
     case "mainnet": {
       let sdk = new CetusClmmSDK(mainnet);
       sdk.senderAddress = senderAddress;
+
       return sdk;
     }
     case "devnet": {

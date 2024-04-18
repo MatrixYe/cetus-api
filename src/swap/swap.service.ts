@@ -23,6 +23,8 @@ export class SwapService {
 
   constructor(private config: ConfigService) {
     this.SDK = this.toChoseSdk();
+
+
   }
 
   toChoseSdk(): CetusClmmSDK {
@@ -94,18 +96,15 @@ export class SwapService {
     return await this.SDK.fullClient.sendTransaction(keypair, swapPayload);
   }
 
-  async toSwapV2(from: string, to: string, amount: number, byAmountIn: boolean, slippage: number, orderSplit: boolean, externalRouter: boolean) {
-    console.log(` from:${from}`);
-    console.log(` to:${to}`);
-    console.log(` amount:${amount}`);
-    console.log(` byAmountIn:${byAmountIn}`);
-    console.log(` slippage:${slippage}`);
-    console.log(` orderSplit:${orderSplit}`);
-    console.log(` externalRouter:${externalRouter}`);
+  async loadGraph() {
+    // if (this.SDK.Router.pathProviders.length != 0) {
+    //   console.log("grap 已经加载过了哈");
+    //   return;
+    // }
     const coinMap = new Map();
     const poolMap = new Map();
     const resp: any = await fetch("https://api-sui.cetus.zone/v2/sui/pools_info", { method: "GET" });
-    const poolsInfo = await resp.json();
+    const poolsInfo = resp.json();
     if (poolsInfo.code === 200) {
       for (const pool of poolsInfo.data.lp_list) {
         if (pool.is_closed) {
@@ -137,7 +136,8 @@ export class SwapService {
         }
       }
     } else {
-      return null;
+      // console.log()
+      console.log(` poolsInfo.code:${poolsInfo.code}`);
     }
     const coins: CoinProvider = {
       coins: Array.from(coinMap.values())
@@ -145,7 +145,25 @@ export class SwapService {
     const paths: PathProvider = {
       paths: Array.from(poolMap.values())
     };
+
     this.SDK.Router.loadGraph(coins, paths);
+  }
+
+  async getCoinsAndPath() {
+
+  }
+
+  async toSwapV2(from: string, to: string, amount: number, byAmountIn: boolean, slippage: number, orderSplit: boolean, externalRouter: boolean) {
+    console.log(` from:${from}`);
+    console.log(` to:${to}`);
+    console.log(` amount:${amount}`);
+    console.log(` byAmountIn:${byAmountIn}`);
+    console.log(` slippage:${slippage}`);
+    console.log(` orderSplit:${orderSplit}`);
+    console.log(` externalRouter:${externalRouter}`);
+    await this.loadGraph();
+
+
     const senderAddress = getSenderAddress(this.config);
     const res = (await this.SDK.RouterV2.getBestRouter(
       from,
