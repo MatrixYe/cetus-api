@@ -46,9 +46,8 @@ export class SwapController {
   @Post("/toV2")
   async toSwapV2(@Body() args: SwapParamV2) {
     // from: string, to: string, amount: number, byAmountIn: boolean, slippage: number, orderSplit: boolean, externalRouter: boolean
-    const resp = await this.swapService.toSwapV2(args.from, args.to, args.amount, args.byAmountIn, args.slippage, args.orderSplit, args.externalRouter);
     // return resp
-    return isNotNull(resp) ? success(resp) : failed("system error");
+    return await this.swapService.toSwapV2(args.from, args.to, args.amount, args.byAmountIn, args.slippage, args.orderSplit, args.externalRouter)
   }
 }
 
