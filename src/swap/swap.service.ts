@@ -16,6 +16,7 @@ import { getKeySecret, getNetWork, getSenderAddress } from "../common/conf";
 import { genKeypair } from "../common/utils";
 import Decimal from "decimal.js";
 import * as BN from "bn.js";
+import * as fs from "fs";
 
 @Injectable()
 export class SwapService {
@@ -23,8 +24,7 @@ export class SwapService {
 
   constructor(private config: ConfigService) {
     this.SDK = this.toChoseSdk();
-
-
+    this.loadGraphByLocal("./pools.json");
   }
 
   toChoseSdk(): CetusClmmSDK {
@@ -96,6 +96,61 @@ export class SwapService {
     return await this.SDK.fullClient.sendTransaction(keypair, swapPayload);
   }
 
+// 定义一个函数来同步读取和解析JSON
+  loadGraphByLocal(filePath: string): any {
+    try {
+      const coinMap = new Map();
+      const poolMap = new Map();
+      // 同步读取文件内容
+      const rawData = fs.readFileSync(filePath, { encoding: "utf-8" });
+      // 解析JSON数据
+      const poolsInfo = JSON.parse(rawData);
+      if (poolsInfo.code === 200) {
+        for (const pool of poolsInfo.data.lp_list) {
+          if (pool.is_closed) {
+            continue;
+          }
+
+          let coin_a = pool.coin_a.address;
+          let coin_b = pool.coin_b.address;
+
+          coinMap.set(coin_a, {
+            address: pool.coin_a.address,
+            decimals: pool.coin_a.decimals
+          });
+          coinMap.set(coin_b, {
+            address: pool.coin_b.address,
+            decimals: pool.coin_b.decimals
+          });
+
+          const pair = `${coin_a}-${coin_b}`;
+          const pathProvider = poolMap.get(pair);
+          if (pathProvider) {
+            pathProvider.addressMap.set(Number(pool.fee) * 100, pool.address);
+          } else {
+            poolMap.set(pair, {
+              base: coin_a,
+              quote: coin_b,
+              addressMap: new Map([[Number(pool.fee) * 100, pool.address]])
+            });
+          }
+        }
+      } else {
+        console.log(`poolsInfo.code != 200 ${poolsInfo.code}`);
+      }
+      const coins: CoinProvider = {
+        coins: Array.from(coinMap.values())
+      };
+      const paths: PathProvider = {
+        paths: Array.from(poolMap.values())
+      };
+      this.SDK.Router.loadGraph(coins, paths);
+    } catch (error) {
+      console.error("Error reading or parsing JSON file:", error);
+      throw error;
+    }
+  }
+
   async loadGraph() {
     // if (this.SDK.Router.pathProviders.length != 0) {
     //   console.log("grap 已经加载过了哈");
@@ -149,10 +204,6 @@ export class SwapService {
     this.SDK.Router.loadGraph(coins, paths);
   }
 
-  async getCoinsAndPath() {
-
-  }
-
   async toSwapV2(from: string, to: string, amount: number, byAmountIn: boolean, slippage: number, orderSplit: boolean, externalRouter: boolean) {
     console.log(` from:${from}`);
     console.log(` to:${to}`);
@@ -161,8 +212,6 @@ export class SwapService {
     console.log(` slippage:${slippage}`);
     console.log(` orderSplit:${orderSplit}`);
     console.log(` externalRouter:${externalRouter}`);
-    await this.loadGraph();
-
 
     const senderAddress = getSenderAddress(this.config);
     const res = (await this.SDK.RouterV2.getBestRouter(
