@@ -205,13 +205,13 @@ export class SwapService {
   }
 
   async toSwapV2(from: string, to: string, amount: number, byAmountIn: boolean, slippage: number, orderSplit: boolean, externalRouter: boolean) {
-    console.log(` from:${from}`);
-    console.log(` to:${to}`);
-    console.log(` amount:${amount}`);
-    console.log(` byAmountIn:${byAmountIn}`);
-    console.log(` slippage:${slippage}`);
-    console.log(` orderSplit:${orderSplit}`);
-    console.log(` externalRouter:${externalRouter}`);
+    // console.log(` from:${from}`);
+    // console.log(` to:${to}`);
+    // console.log(` amount:${amount}`);
+    // console.log(` byAmountIn:${byAmountIn}`);
+    // console.log(` slippage:${slippage}`);
+    // console.log(` orderSplit:${orderSplit}`);
+    // console.log(` externalRouter:${externalRouter}`);
 
     const senderAddress = getSenderAddress(this.config);
     const res = (await this.SDK.RouterV2.getBestRouter(
@@ -234,6 +234,7 @@ export class SwapService {
       const allCoinAsset = await this.SDK.getOwnerCoinAssets(senderAddress);
       // If recipient not set, transfer objects move call will use ctx sender.
       const payload = await TransactionUtil.buildAggregatorSwapTransaction(this.SDK, res, allCoinAsset, "", 0.5);
+      payload.setGasBudget(20000000);
       const keypair = genKeypair(getKeySecret(this.config));
       return await this.SDK.fullClient.sendTransaction(keypair, payload);
     } else {
