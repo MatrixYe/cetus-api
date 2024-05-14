@@ -248,6 +248,8 @@ export class LiquidityService {
       slippage: slippage,
       curSqrtPrice: curSqrtPrice
     });
+    createAddLiquidityTransactionPayload.setGasBudget(20000000);
+
     const keypair = genKeypair(getKeySecret(this.config));
     // console.log("open_and_add_liquidity_fix_token: ", transferTxn);
     return await this.SDK.fullClient.sendTransaction(keypair, createAddLiquidityTransactionPayload);
@@ -282,6 +284,8 @@ export class LiquidityService {
     };
     //build palyLoad
     const removeLiquidityTransactionPayload = await this.SDK.Position.removeLiquidityTransactionPayload(removeLiquidityParams);
+    removeLiquidityTransactionPayload.setGasBudget(20000000);
+
     // get singer
     const keypair = genKeypair(getKeySecret(this.config));
     // send tx
@@ -321,13 +325,13 @@ export class LiquidityService {
       pos_id: positionId,
       rewarder_coin_types: [...rewardCoinTypes]
     });
+    closePositionTransactionPayload.setGasBudget(20000000);
+
     // get singer
     const keypair = genKeypair(getKeySecret(this.config));
     // send tx
     return await this.SDK.fullClient.sendTransaction(keypair, closePositionTransactionPayload);
   }
-
-
 
 
 }
