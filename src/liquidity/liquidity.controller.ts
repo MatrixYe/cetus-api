@@ -155,7 +155,7 @@ export class LiquidityController {
 
   @Post("/addLiquidity")
   async addLiquidity(@Body() args: AddLiquidityDto) {
-    const resp = await this.liquidityService.addLiquidityPayload(
+    return await this.liquidityService.addLiquidityPayload(
       args.positionId,
       args.fix_amount_a,
       args.amount,
@@ -163,7 +163,6 @@ export class LiquidityController {
       args.decimalsB,
       args.slippage,
       args.collect_fee);
-    return isNotNull(resp) ? success(resp) : failed("system error");
   }
 
   @Post("/removeLiquidity")
@@ -175,8 +174,7 @@ export class LiquidityController {
     // console.log(`liquidityOut ${liquidityOut}`);
     // console.log(`slippage ${slippage}`);
 
-    const resp = await this.liquidityService.removeLiquidity(positionId, liquidityOut, slippage);
-    return isNotNull(resp) ? success(resp) : failed("system error");
+    return await this.liquidityService.removeLiquidity(positionId, liquidityOut, slippage);
 
   }
 
@@ -185,8 +183,7 @@ export class LiquidityController {
   async closePosition(@Body() args: ClostLiquidityDto) {
     const positionId = args.positionId;
     const slippage = args.slippage;
-    const resp = await this.liquidityService.clostPosition(positionId, slippage);
-    return isNotNull(resp) ? success(resp) : failed("system error");
+    return await this.liquidityService.clostPosition(positionId, slippage);
   }
 }
 
