@@ -89,6 +89,7 @@ export class SwapService {
       coinTypeB: pool.coinTypeB,
       pool_id: pool.poolAddress
     });
+
     swapPayload.setGasBudget(2000000);
     // console.log(`swapPayload:${swapPayload}`);
     const ks = getKeySecret(this.config);

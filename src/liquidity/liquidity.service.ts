@@ -145,6 +145,8 @@ export class LiquidityService {
       curSqrtPrice: curSqrtPrice
     });
     const keypair = genKeypair(getKeySecret(this.config));
+    createAddLiquidityTransactionPayload.setGasBudget(20000000);
+
     // console.log("open_and_add_liquidity_fix_token: ", transferTxn);
     return await this.SDK.fullClient.sendTransaction(keypair, createAddLiquidityTransactionPayload);
 
@@ -198,6 +200,8 @@ export class LiquidityService {
       curSqrtPrice: curSqrtPrice
     });
     const keypair = genKeypair(getKeySecret(this.config));
+    createAddLiquidityTransactionPayload.setGasBudget(20000000);
+
     // console.log("open_and_add_liquidity_fix_token: ", transferTxn);
     return await this.SDK.fullClient.sendTransaction(keypair, createAddLiquidityTransactionPayload);
 
