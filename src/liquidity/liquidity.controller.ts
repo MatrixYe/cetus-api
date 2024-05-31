@@ -185,5 +185,17 @@ export class LiquidityController {
     const slippage = args.slippage;
     return await this.liquidityService.clostPosition(positionId, slippage);
   }
+
+
+  // 开仓 同时质押LP
+  @Post("/openPositionAndStach")
+  async openPositionAndStach() {
+
+    return;
+  }
+
+
+
 }
+
 

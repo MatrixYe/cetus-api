@@ -337,5 +337,10 @@ export class LiquidityService {
     return await this.SDK.fullClient.sendTransaction(keypair, closePositionTransactionPayload);
   }
 
+//   开仓、质押LP到农场
+  async openPositionAndStack() {
+    // this.SDK.RouterV2.
+
+  }
 
 }
