@@ -1,13 +1,10 @@
-//   fullRpcUrl: "https://sui-mainnet-rpc.allthatnode.com/tnn5tw00YSIbbHO6r3ttbj11qWzqBsMq",
-//     address: "0x60c7f6c6173a38e7d68efe0c2519ec37e466275bbf0d6a3b62a1b8fc6b12004c"
-// noinspection SpellCheckingInspection
 import CetusClmmSDK, { SdkOptions } from "@cetusprotocol/cetus-sui-clmm-sdk";
 
 const mainnet = {
   // 测试的key
   // fullRpcUrl: "https://sui-mainnet-rpc.allthatnode.com/NDfmRHNd7Tdx20YZGR2MVU4EFs2I9dDD",
-  // 更新后的key
-  fullRpcUrl: "https://sui-mainnet.g.allthatnode.com/full/json_rpc",
+  fullRpcUrl: "https://sui-mainnet.g.allthatnode.com/full/json_rpc/996ab4737fad47a8b4367e0b954474f3",
+
   swapCountUrl: "https://api-sui.cetus.zone/v2/sui/swap/count",
   simulationAccount: {
     address: "0x60c7f6c6173a38e7d68efe0c2519ec37e466275bbf0d6a3b62a1b8fc6b12004c"

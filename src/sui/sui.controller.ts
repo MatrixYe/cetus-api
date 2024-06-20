@@ -9,6 +9,7 @@ export class SuiController {
   constructor(private suiServer: SuiService) {
   }
 
+  // 获取余额数据
   @Get("/getAllBalances")
   async getAllBalances(@Query("owner") owner: string) {
     try {
@@ -38,6 +39,5 @@ export class SuiController {
       return failed(error);
     }
   }
-
 
 }
