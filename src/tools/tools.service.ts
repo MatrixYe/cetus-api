@@ -8,7 +8,7 @@ import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
 import { MIST_PER_SUI } from "@mysten/sui.js/utils";
 import { ConfigService } from "@nestjs/config";
 import { selectSDK } from "../common/sdk";
-import { getAppName, getNetWork, getSenderAddress } from "../common/conf";
+import { getAppName, getEndpointUrl, getNetWork, getSenderAddress } from "../common/conf";
 
 @Injectable()
 export class ToolsService {
@@ -19,7 +19,8 @@ export class ToolsService {
   }
 
   toChoseSdk(): CetusClmmSDK {
-    return selectSDK(getNetWork(this.config), getSenderAddress(this.config));
+
+    return selectSDK(getNetWork(this.config), getSenderAddress(this.config),getEndpointUrl(this.config));
   }
 
   async calculateSwapFee(from: string, to: string, amount: number, byAmountIn: boolean, priceSplitPoint: number, partner: string) {

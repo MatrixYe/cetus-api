@@ -13,7 +13,7 @@ import CetusClmmSDK, {
 } from "@cetusprotocol/cetus-sui-clmm-sdk";
 import { selectSDK } from "../common/sdk";
 import { ConfigService } from "@nestjs/config";
-import { getKeySecret, getNetWork, getSenderAddress } from "../common/conf";
+import { getEndpointUrl, getKeySecret, getNetWork, getSenderAddress } from "../common/conf";
 import * as BN from "bn.js";
 import { genKeypair } from "../common/utils";
 import Decimal from "decimal.js";
@@ -27,7 +27,7 @@ export class LiquidityService {
   }
 
   toChoseSdk(): CetusClmmSDK {
-    return selectSDK(getNetWork(this.config), getSenderAddress(this.config));
+    return selectSDK(getNetWork(this.config), getSenderAddress(this.config),getEndpointUrl(this.config));
   }
 
   async retrievalPositions(accountAddress: string, poolId: string) {

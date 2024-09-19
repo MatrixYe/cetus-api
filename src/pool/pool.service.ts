@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 import CetusClmmSDK from "@cetusprotocol/cetus-sui-clmm-sdk";
 import { ConfigService } from "@nestjs/config";
 import { selectSDK } from "../common/sdk";
-import { getNetWork, getSenderAddress } from "../common/conf";
+import { getEndpointUrl, getNetWork, getSenderAddress } from "../common/conf";
 
 @Injectable()
 export class PoolService {
@@ -17,7 +17,7 @@ export class PoolService {
   toChoseSdk(): CetusClmmSDK {
     const network = getNetWork(this.config);
     console.log(`network:${network}`);
-    return selectSDK(getNetWork(this.config), getSenderAddress(this.config));
+    return selectSDK(getNetWork(this.config), getSenderAddress(this.config),getEndpointUrl(this.config));
   }
 
   async retrieveOnePool(poolId: string, forceRefresh: boolean) {

@@ -37,11 +37,14 @@ git clone https://github.com/MatrixYe/cetus-app.git
 进入项目根目录,创建一个新文件，命名`.env`，将下面内容复制到文件内
 ```dotenv
 #程序名称，随便
-APP_NAME="Cetus App"
+APP_NAME="Cetus-API"
 #端口
 APP_PORT=5088
 
-#目标sui网络，mainnet:主网，devnet:测试网，不用改
+# Sui节点URL，（替换成你的节点）
+ENDPOINT_URL="https://demo.com"
+
+#目标sui网络，mainnet:主网，devnet:测试网,(不要修改)
 NETWORK="mainnet"
 
 # 钱包地址(替换成你的钱包地址)
@@ -76,6 +79,9 @@ docker ps -a
 docker stop cetus-app
 # 重启容器
 docker start cetus-app
+# 移除容器
+docker rm -f cetus-app
 
 ```
+
 [接口文档地址](https://console-docs.apipost.cn/preview/b25b3aa44bbbdd15/25154e90fafad423)

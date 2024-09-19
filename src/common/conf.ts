@@ -18,3 +18,7 @@ export function getAppName(c: ConfigService): string {
 export function getSenderAddress(c: ConfigService): string {
   return c.get("SENDER_ADDRESS");
 }
+
+export function getEndpointUrl(c: ConfigService): string {
+  return c.get("ENDPOINT_URL");
+}

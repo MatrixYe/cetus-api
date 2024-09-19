@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 import CetusClmmSDK, { TickData } from "@cetusprotocol/cetus-sui-clmm-sdk";
 import { ConfigService } from "@nestjs/config";
 import { selectSDK } from "../common/sdk";
-import { getNetWork, getSenderAddress } from "../common/conf";
+import { getEndpointUrl, getNetWork, getSenderAddress } from "../common/conf";
 
 @Injectable()
 export class TicksService {
@@ -15,7 +15,7 @@ export class TicksService {
   }
 
   toChoseSdk(): CetusClmmSDK {
-    return selectSDK(getNetWork(this.config), getSenderAddress(this.config));
+    return selectSDK(getNetWork(this.config), getSenderAddress(this.config),getEndpointUrl(this.config));
   }
 
   async fetchTicks(poolId: string, coinTypeA: string, coinTypeB: string) {

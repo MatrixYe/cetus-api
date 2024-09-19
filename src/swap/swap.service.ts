@@ -12,7 +12,7 @@ import {
   TransactionUtil
 } from "@cetusprotocol/cetus-sui-clmm-sdk";
 import { ConfigService } from "@nestjs/config";
-import { getKeySecret, getNetWork, getSenderAddress } from "../common/conf";
+import { getEndpointUrl, getKeySecret, getNetWork, getSenderAddress } from "../common/conf";
 import { genKeypair } from "../common/utils";
 import Decimal from "decimal.js";
 import * as BN from "bn.js";
@@ -28,7 +28,7 @@ export class SwapService {
   }
 
   toChoseSdk(): CetusClmmSDK {
-    return selectSDK(getNetWork(this.config), getSenderAddress(this.config));
+    return selectSDK(getNetWork(this.config), getSenderAddress(this.config),getEndpointUrl(this.config));
   }
 
 

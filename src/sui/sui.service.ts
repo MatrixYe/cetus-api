@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { SuiClient } from "@mysten/sui.js/client";
 import { ConfigService } from "@nestjs/config";
+import { getEndpointUrl } from "../common/conf";
 
 @Injectable()
 export class SuiService {
@@ -8,8 +9,8 @@ export class SuiService {
 
   constructor(private config: ConfigService) {
 
-    // const network = getNetWork(this.config);
-    const rpcUrl = "https://sui-mainnet.g.allthatnode.com/full/json_rpc/996ab4737fad47a8b4367e0b954474f3";
+    const rpcUrl = getEndpointUrl(this.config);
+    getEndpointUrl(this.config);
     this.client = new SuiClient({ url: rpcUrl });
   }
 

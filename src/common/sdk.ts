@@ -1,6 +1,6 @@
 import CetusClmmSDK, { SdkOptions } from "@cetusprotocol/cetus-sui-clmm-sdk";
 
-const mainnet = {
+let cetus_config_mainnet = {
   // 测试的key
   // fullRpcUrl: "https://sui-mainnet-rpc.allthatnode.com/NDfmRHNd7Tdx20YZGR2MVU4EFs2I9dDD",
   fullRpcUrl: "https://sui-mainnet.g.allthatnode.com/full/json_rpc/996ab4737fad47a8b4367e0b954474f3",
@@ -49,7 +49,7 @@ const mainnet = {
   aggregatorUrl: "https://api-sui.cetus.zone/router"
 };
 
-const clmmTestnet: SdkOptions = {
+let clmmTestnet: SdkOptions = {
   fullRpcUrl: "https://fullnode.testnet.sui.io",
   swapCountUrl: "https://api-sui.devcetus.com/v2/sui/swap/count",
   simulationAccount: {
@@ -119,22 +119,26 @@ const clmmTestnet: SdkOptions = {
 };
 
 
-export function selectSDK(network: string, senderAddress: string) {
+export function selectSDK(network: string, senderAddress: string, endpoint_url: string) {
+  cetus_config_mainnet.fullRpcUrl = endpoint_url;
+  cetus_config_mainnet.simulationAccount.address = senderAddress;
+  let sdk = new CetusClmmSDK(cetus_config_mainnet);
+  sdk.senderAddress = senderAddress;
+  return sdk;
 
-  switch (network) {
-    case "mainnet": {
-      let sdk = new CetusClmmSDK(mainnet);
-      sdk.senderAddress = senderAddress;
-
-      return sdk;
-    }
-    case "devnet": {
-      let sdk = new CetusClmmSDK(clmmTestnet);
-      sdk.senderAddress = senderAddress;
-      return sdk;
-    }
-    default: {
-      return null;
-    }
-  }
+  // switch (network) {
+  //   case "mainnet": {
+  //     let sdk = new CetusClmmSDK(mainnet);
+  //     sdk.senderAddress = senderAddress;
+  //     return sdk;
+  //   }
+  //   case "devnet": {
+  //     let sdk = new CetusClmmSDK(clmmTestnet);
+  //     sdk.senderAddress = senderAddress;
+  //     return sdk;
+  //   }
+  //   default: {
+  //     return null;
+  //   }
+  // }
 }
