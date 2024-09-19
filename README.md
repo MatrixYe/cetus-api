@@ -39,7 +39,7 @@ git clone https://github.com/MatrixYe/cetus-app.git
 #程序名称，随便
 APP_NAME="Cetus-API"
 #端口
-APP_PORT=5088
+APP_PORT=5009
 
 # Sui节点URL，（替换成你的节点）
 ENDPOINT_URL="https://demo.com"
