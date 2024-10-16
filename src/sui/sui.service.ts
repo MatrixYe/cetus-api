@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { SuiClient } from "@mysten/sui.js/client";
+import { SuiClient } from "@mysten/sui/client";
 import { ConfigService } from "@nestjs/config";
-import { getEndpointUrl } from "../common/conf";
+import { getEndpointUrl, getKeySecret } from "../common/conf";
+import { genKeypair } from "../common/utils";
 
 @Injectable()
 export class SuiService {
@@ -26,5 +27,15 @@ export class SuiService {
 
   async getCoinMetadata(coinType: string) {
     return await this.client.getCoinMetadata({ coinType });
+  }
+
+  async getWalletInfo() {
+    const keypair = genKeypair(getKeySecret(this.config));
+    return {
+      "SecretKey": keypair.getSecretKey().slice(0, 4) + "****" + keypair.getSecretKey().slice(-4),
+      "SuiAddress": keypair.toSuiAddress(),
+      "PublicKey": keypair.getPublicKey().toBase64(),
+      "PublicKeyEncode": "Base64"
+    };
   }
 }

@@ -10,6 +10,7 @@ export class PoolController {
   constructor(private poolService: PoolService) {
   }
 
+  // 查询单个Pool信息
   @Get("/retrieveOnePool")
   async retrieveOnePool(@Query("poolId") poolId: string, @Query("forceRefresh") forceRefresh?: boolean) {
     const result = await this.poolService.retrieveOnePool(poolId, forceRefresh);
@@ -17,6 +18,7 @@ export class PoolController {
 
   }
 
+  // 查询全部Pool信息
   @Get("/retrievelAllPools")
   async retrievelAllPools() {
     const result = await this.poolService.retrievelAllPools();

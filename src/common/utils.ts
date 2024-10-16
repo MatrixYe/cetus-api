@@ -1,4 +1,5 @@
-import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+
 
 /**
  *
@@ -36,17 +37,21 @@ export function isNotNull(v) {
   return v != null;
 }
 
-export function genKeypair(secretKey: string) {
-  const u8arr = hexStringToUint8Array(secretKey);
-  // console.log(u8arr);
-  // return Secp256k1Keypair.fromSecretKey(u8arr);
-  return Ed25519Keypair.fromSecretKey(u8arr);
+export function genKeypair(secretKey: string): Ed25519Keypair {
+  if (secretKey.startsWith("suiprivkey")) {
+    // 从suiet 导出的私钥以suiprivkey开头
+    console.log(`这是导出的私钥privakey`);
+    return Ed25519Keypair.fromSecretKey(secretKey);
+  } else {
+    // 标准私钥格式
+    const u8arr = hexStringToUint8Array(secretKey);
+    return Ed25519Keypair.fromSecretKey(u8arr);
+  }
 }
-
 
 function hexStringToUint8Array(hexString: string): Uint8Array {
   if (hexString.length % 2 !== 0) {
-    throw new Error("十六进制字符串应该有偶数长度");
+    throw new Error("私钥格式错误:十六进制字符串应该有偶数长度");
   }
 
   const arrayBuffer = new Uint8Array(hexString.length / 2);
@@ -54,7 +59,7 @@ function hexStringToUint8Array(hexString: string): Uint8Array {
   for (let i = 0; i < hexString.length; i += 2) {
     const byteValue = parseInt(hexString.substring(i, i + 2), 16);
     if (isNaN(byteValue)) {
-      throw new Error(`十六进制字符串中包含非法字符: ${hexString.substring(i, i + 2)}`);
+      throw new Error(`私钥格式错误:十六进制字符串中包含非法字符: ${hexString.substring(i, i + 2)}`);
     }
     arrayBuffer[i / 2] = byteValue;
   }

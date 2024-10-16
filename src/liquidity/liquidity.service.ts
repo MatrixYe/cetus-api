@@ -27,7 +27,7 @@ export class LiquidityService {
   }
 
   toChoseSdk(): CetusClmmSDK {
-    return selectSDK(getNetWork(this.config), getSenderAddress(this.config),getEndpointUrl(this.config));
+    return selectSDK(getNetWork(this.config), getSenderAddress(this.config), getEndpointUrl(this.config));
   }
 
   async retrievalPositions(accountAddress: string, poolId: string) {
@@ -337,10 +337,5 @@ export class LiquidityService {
     return await this.SDK.fullClient.sendTransaction(keypair, closePositionTransactionPayload);
   }
 
-//   开仓、质押LP到农场
-  async openPositionAndStack() {
-    // this.SDK.RouterV2.
-
-  }
 
 }

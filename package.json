@@ -20,8 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@cetusprotocol/cetus-sui-clmm-sdk": "^4.3.1",
-    "@mysten/sui.js": "^0.54.1",
+    "@cetusprotocol/cetus-sui-clmm-sdk": "^5.1.6",
+    "@mysten/sui": "^1.12.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.0",
     "@nestjs/core": "^10.0.0",

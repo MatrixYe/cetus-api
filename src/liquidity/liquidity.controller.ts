@@ -187,15 +187,11 @@ export class LiquidityController {
   }
 
 
-  // 开仓 同时质押LP
-  @Post("/openPositionAndStach")
-  async openPositionAndStach() {
-
-    return;
-  }
-
-
-
+  // // 开仓 同时质押LP
+  // @Post("/testKeypair")
+  // async openPositionAndStach() {
+  //   return await this.liquidityService.testKeypair();
+  // }
 }
 
 

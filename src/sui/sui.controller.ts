@@ -40,4 +40,9 @@ export class SuiController {
     }
   }
 
+  @Get("/getWalletInfo")
+  async getWalletInfo() {
+    return await this.suiServer.getWalletInfo();
+  }
+
 }

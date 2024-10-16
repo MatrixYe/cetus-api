@@ -4,8 +4,8 @@ import { Injectable } from "@nestjs/common";
 import CetusClmmSDK, { ClmmPoolUtil, Position, TickMath } from "@cetusprotocol/cetus-sui-clmm-sdk";
 import * as BN from "bn.js";
 
-import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
-import { MIST_PER_SUI } from "@mysten/sui.js/utils";
+import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
+import { MIST_PER_SUI } from "@mysten/sui/utils";
 import { ConfigService } from "@nestjs/config";
 import { selectSDK } from "../common/sdk";
 import { getAppName, getEndpointUrl, getNetWork, getSenderAddress } from "../common/conf";
