@@ -1,9 +1,9 @@
 import CetusClmmSDK, { SdkOptions } from "@cetusprotocol/cetus-sui-clmm-sdk";
 
 let cetus_config_mainnet = {
-  // 测试的key
-  // fullRpcUrl: "https://sui-mainnet-rpc.allthatnode.com/NDfmRHNd7Tdx20YZGR2MVU4EFs2I9dDD",
-  fullRpcUrl: "https://sui-mainnet.g.allthatnode.com/full/json_rpc/996ab4737fad47a8b4367e0b954474f3",
+  // 此处仅为默认值，运行时会被 selectSDK() 传入的 ENDPOINT_URL 覆盖。
+  // 不要在这里写真实的 provider key。
+  fullRpcUrl: "",
 
   swapCountUrl: "https://api-sui.cetus.zone/v2/sui/swap/count",
   simulationAccount: {

@@ -13,9 +13,9 @@
 // # 是否打开接口加密，生产环境下必须为true
 // SERVER_VERIFY=false
 // # api key
-// SERVER_API_KEY="kpCecz5E6A4fHh2mU3oGesaRGYhHGQhd"
+// SERVER_API_KEY="<your-api-key>"
 // # 密钥
-// SERVER_SECRET_KEY="5X3qszFzQASoP9ApKVMQpOJCCMzu06QFkfs17wMfHw3z9soalVl0yoMVrwhg4whB"
+// SERVER_SECRET_KEY="<your-secret-key>"
 // SERVER_TIMESTAMP_LIMIT=10
 //
 //
