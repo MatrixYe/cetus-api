@@ -120,3 +120,7 @@ docker run -d --name cetus-api --env-file .env -p 5009:5009 cetus-api
 `/tools/system`、`/tools/calculateSwapFee`、`/tools/sqrtPriceX64ToPrice`、
 `/tools/getCoinAmountFromLiquidity`、`/tools/requestSuiFromFaucetV0`（devnet 水龙头）、
 `/tools/verifySecretKey`
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
